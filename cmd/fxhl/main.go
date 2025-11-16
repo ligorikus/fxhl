@@ -12,12 +12,16 @@ import (
 	"github.com/ligorikus/fxhl/internal/texture"
 )
 
+var (
+	baseOrthoMin = -8.0
+	baseOrthoMax = 8.0
+)
+
 func init() {
 	runtime.LockOSThread()
 }
 
 func main() {
-	fmt.Println(gamemap.NewHexagonCoordinatesList())
 	if err := glfw.Init(); err != nil {
 		log.Fatalln("failed to initialize glfw:", err)
 	}
@@ -38,35 +42,38 @@ func main() {
 
 	window.MakeContextCurrent()
 
+	window.SetMouseButtonCallback(mouseButtonCallback)
+	window.SetScrollCallback(scrollCallback)
+
 	if err := gl.Init(); err != nil {
 		panic(err)
 	}
 
-	img := texture.NewImage("assets/Hexes/MapDeadlandsHex.TGA")
-	rgba := texture.NewRgba(img)
+	hexTextures := [gamemap.HexNameCount]uint32{}
+	hexes := [gamemap.HexNameCount]Hexagone{}
+	for key, value := range gamemap.NewHexagonCoordinatesList() {
+		img := texture.NewImage("assets/Hexes/Map" + gamemap.HexNameList[gamemap.HexName(key)] + "Hex.TGA")
+		rgba := texture.NewRgba(img)
 
-	img2 := texture.NewImage("assets/Hexes/MapMarbanHollowHex.TGA")
-	rgba2 := texture.NewRgba(img2)
+		hexTextures[key] = texture.NewTexture(int32(key), img, rgba)
+		defer gl.DeleteTextures(int32(key), &hexTextures[key])
 
-	deadlands := texture.NewTexture(1, img, rgba)
-	marban := texture.NewTexture(2, img2, rgba2)
-	defer gl.DeleteTextures(2, &marban)
-	defer gl.DeleteTextures(1, &deadlands)
+		hexes[key] = getHexagoneCoords(float32(value.GetX()), float32(value.GetY()), 1.0)
+	}
 
-	hex := getHexagoneCoords(0.0, 0.0, 1.0)
-	hex2 := getHexagoneCoords(1.0, 1.0, 1.0)
 	gl.ClearColor(0.2, 0.2, 0.2, 1.0)
 
 	gl.MatrixMode(gl.PROJECTION)
 	gl.LoadIdentity()
-	gl.Ortho(-5.0, 5.0, -5.0, 5.0, -1.0, 1.0)
+	gl.Ortho(baseOrthoMin, baseOrthoMax, baseOrthoMin, baseOrthoMax, -1.0, 1.0)
 	gl.MatrixMode(gl.MODELVIEW)
 	gl.LoadIdentity()
 
 	for !window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-		hex.drawHexagone(deadlands)
-		hex2.drawHexagone(marban)
+		for key, value := range hexes {
+			value.drawHexagone(hexTextures[key])
+		}
 		window.SwapBuffers()
 		glfw.PollEvents()
 	}
@@ -114,10 +121,11 @@ type Hexagone struct {
 	bottomRight Vertex
 }
 
-func getHexagoneCoords(x, y float64, radius float32) Hexagone {
+func getHexagoneCoords(x, y float32, radius float32) Hexagone {
+	var cx, cy float32
 
-	cx := float32(x*math.Cos(math.Pi/3)+y*math.Sin(math.Pi/3)) * radius
-	cy := float32(y*math.Cos(math.Pi/3)-x*math.Sin(math.Pi/3)) * radius
+	cx = x * (radius + 0.5)
+	cy = 2*y*float32(math.Sin(math.Pi/3)) + x*float32(math.Sin(math.Pi/3))
 
 	right := Vertex{
 		x: cx + radius,
@@ -157,4 +165,32 @@ func getHexagoneCoords(x, y float64, radius float32) Hexagone {
 		bottomLeft:  bottomLeft,
 		bottomRight: bottomRight,
 	}
+}
+
+func mouseButtonCallback(w *glfw.Window, button glfw.MouseButton, action glfw.Action, mods glfw.ModifierKey) {
+	buttonName := ""
+	switch button {
+	case glfw.MouseButtonLeft:
+		buttonName = "Left"
+	case glfw.MouseButtonRight:
+		buttonName = "Right"
+	case glfw.MouseButtonMiddle:
+		buttonName = "Middle"
+	default:
+		buttonName = fmt.Sprintf("Button %d", button)
+	}
+
+	actionName := ""
+	switch action {
+	case glfw.Press:
+		actionName = "Pressed"
+	case glfw.Release:
+		actionName = "Released"
+	}
+
+	fmt.Printf("Mouse %s button %s (Mods: %v)\n", buttonName, actionName, mods)
+}
+
+func scrollCallback(w *glfw.Window, xoff, yoff float64) {
+	fmt.Printf("Scroll event: x-offset=%.2f, y-offset=%.2f\n", xoff, yoff)
 }

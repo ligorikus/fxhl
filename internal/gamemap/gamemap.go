@@ -1,6 +1,6 @@
 package gamemap
 
-type HexName int
+type HexName int32
 
 const (
 	Acrithia HexName = iota
@@ -46,10 +46,10 @@ const (
 	ViperPit
 	WeatheredExpanse
 	Westgate
-	hexNameCount
+	HexNameCount
 )
 
-var hexNameList = map[HexName]string{
+var HexNameList = map[HexName]string{
 	Acrithia:         "Acrithia",
 	AllodsBight:      "AllodsBight",
 	AshFields:        "AshFields",
@@ -95,169 +95,193 @@ var hexNameList = map[HexName]string{
 	Westgate:         "Westgate",
 }
 
-func GetHexNameList() map[HexName]string {
-	return hexNameList
-}
-
 type HexagonCoordinates struct {
 	x int32
 	y int32
-	z int32
+}
+
+func (hex *HexagonCoordinates) GetX() int32 {
+	return hex.x
+}
+
+func (hex *HexagonCoordinates) GetY() int32 {
+	return hex.y
 }
 
 func NewHexagonCoordinatesList() []HexagonCoordinates {
-	coordinates := [hexNameCount]HexagonCoordinates{}
-	coordinates[NevishLine].x = 0
-	coordinates[Stonecradle].x = 0
-	coordinates[LinnOfMercy].x = 0
-	coordinates[Deadlands].x = 0
-	coordinates[DrownedVale].x = 0
-	coordinates[AllodsBight].x = 0
-	coordinates[ReaversPass].x = 0
-
-	coordinates[CallumsCape].x = 1
-	coordinates[TheMoors].x = 1
-	coordinates[CallahansPassage].x = 1
-	coordinates[MarbanHollow].x = 1
-	coordinates[Clahstra].x = 1
-	coordinates[EndlessShore].x = 1
-	coordinates[TheFingers].x = 1
-
-	coordinates[SpeakingWoods].x = 2
-	coordinates[ReachingTrail].x = 2
-	coordinates[ViperPit].x = 2
-	coordinates[WeatheredExpanse].x = 2
-	coordinates[StlicanShelf].x = 2
-	coordinates[TempestIsland].x = 2
-
-	coordinates[BasinSionnach].x = 3
-	coordinates[HowlCounty].x = 3
-	coordinates[ClansheadValley].x = 3
-	coordinates[MorgensCrossing].x = 3
-	coordinates[Godcrofts].x = 3
-
-	coordinates[Oarbreaker].x = -1
-	coordinates[FarranacCoast].x = -1
-	coordinates[KingsCage].x = -1
-	coordinates[LochMor].x = -1
-	coordinates[UmbralWildwood].x = -1
-	coordinates[ShackledChasm].x = -1
-	coordinates[Terminus].x = -1
-
-	coordinates[FishermansRow].x = -2
-	coordinates[Westgate].x = -2
-	coordinates[Sableport].x = -2
-	coordinates[Heartlands].x = -2
-	coordinates[GreatMarch].x = -2
-	coordinates[Acrithia].x = -2
-
-	coordinates[StemaLanding].x = -3
-	coordinates[Origin].x = -3
-	coordinates[AshFields].x = -3
-	coordinates[RedRiver].x = -3
-	coordinates[Kalokai].x = -3
-
-	coordinates[Origin].z = 0
-	coordinates[Sableport].z = 0
-	coordinates[LochMor].z = 0
-	coordinates[Deadlands].z = 0
-	coordinates[MarbanHollow].z = 0
-	coordinates[WeatheredExpanse].z = 0
-	coordinates[MorgensCrossing].z = 0
-
-	coordinates[StemaLanding].z = 1
-	coordinates[Westgate].z = 1
-	coordinates[KingsCage].z = 1
-	coordinates[LinnOfMercy].z = 1
-	coordinates[CallahansPassage].z = 1
-	coordinates[ViperPit].z = 1
-	coordinates[ClansheadValley].z = 1
-
-	coordinates[FishermansRow].z = 2
-	coordinates[FarranacCoast].z = 2
-	coordinates[Stonecradle].z = 2
-	coordinates[TheMoors].z = 2
-	coordinates[ReachingTrail].z = 2
-	coordinates[HowlCounty].z = 2
-
-	coordinates[Oarbreaker].z = 3
-	coordinates[NevishLine].z = 3
-	coordinates[CallumsCape].z = 3
-	coordinates[SpeakingWoods].z = 3
-	coordinates[BasinSionnach].z = 3
-
-	coordinates[AshFields].z = -1
-	coordinates[Heartlands].z = -1
-	coordinates[UmbralWildwood].z = -1
-	coordinates[DrownedVale].z = -1
-	coordinates[Clahstra].z = -1
-	coordinates[StlicanShelf].z = -1
-	coordinates[Godcrofts].z = -1
-
-	coordinates[RedRiver].z = -2
-	coordinates[GreatMarch].z = -2
-	coordinates[ShackledChasm].z = -2
-	coordinates[AllodsBight].z = -2
-	coordinates[EndlessShore].z = -2
-	coordinates[TempestIsland].z = -2
-
-	coordinates[Kalokai].z = -3
-	coordinates[Acrithia].z = -3
-	coordinates[Terminus].z = -3
-	coordinates[ReaversPass].z = -3
-	coordinates[TheFingers].z = -3
-
-	coordinates[BasinSionnach].y = 0
-	coordinates[ReachingTrail].y = 0
-	coordinates[CallahansPassage].y = 0
-	coordinates[Deadlands].y = 0
-	coordinates[UmbralWildwood].y = 0
-	coordinates[GreatMarch].y = 0
-	coordinates[Kalokai].y = 0
-
-	coordinates[HowlCounty].y = 1
-	coordinates[ViperPit].y = 1
-	coordinates[MarbanHollow].y = 1
-	coordinates[DrownedVale].y = 1
-	coordinates[ShackledChasm].y = 1
-	coordinates[Acrithia].y = 1
-
-	coordinates[ClansheadValley].y = 2
-	coordinates[WeatheredExpanse].y = 2
-	coordinates[Clahstra].y = 2
-	coordinates[AllodsBight].y = 2
-	coordinates[Terminus].y = 2
-
-	coordinates[MorgensCrossing].y = 3
-	coordinates[StlicanShelf].y = 3
-	coordinates[EndlessShore].y = 3
-	coordinates[ReaversPass].y = 3
-
-	coordinates[Godcrofts].y = 4
-	coordinates[TempestIsland].y = 4
-	coordinates[TheFingers].y = 4
-
-	coordinates[SpeakingWoods].y = -1
-	coordinates[TheMoors].y = -1
-	coordinates[LinnOfMercy].y = -1
-	coordinates[LochMor].y = -1
-	coordinates[Heartlands].y = -1
-	coordinates[RedRiver].y = -1
-
-	coordinates[CallumsCape].y = -2
-	coordinates[Stonecradle].y = -2
-	coordinates[KingsCage].y = -2
-	coordinates[Sableport].y = -2
-	coordinates[AshFields].y = -2
-
-	coordinates[NevishLine].y = -3
-	coordinates[FarranacCoast].y = -3
-	coordinates[Westgate].y = -3
-	coordinates[Origin].y = -3
-
-	coordinates[Oarbreaker].y = -4
-	coordinates[FishermansRow].y = -4
-	coordinates[StemaLanding].y = -4
+	coordinates := [HexNameCount]HexagonCoordinates{}
+	coordinates[Acrithia] = HexagonCoordinates{
+		x: 1,
+		y: -3,
+	}
+	coordinates[AllodsBight] = HexagonCoordinates{
+		x: 2,
+		y: -2,
+	}
+	coordinates[AshFields] = HexagonCoordinates{
+		x: -2,
+		y: -1,
+	}
+	coordinates[BasinSionnach] = HexagonCoordinates{
+		x: 0,
+		y: 3,
+	}
+	coordinates[CallahansPassage] = HexagonCoordinates{
+		x: 0,
+		y: 1,
+	}
+	coordinates[CallumsCape] = HexagonCoordinates{
+		x: -2,
+		y: 3,
+	}
+	coordinates[Clahstra] = HexagonCoordinates{
+		x: 2,
+		y: -1,
+	}
+	coordinates[ClansheadValley] = HexagonCoordinates{
+		x: 2,
+		y: 1,
+	}
+	coordinates[Deadlands] = HexagonCoordinates{
+		x: 0,
+		y: 0,
+	}
+	coordinates[DrownedVale] = HexagonCoordinates{
+		x: 1,
+		y: -1,
+	}
+	coordinates[EndlessShore] = HexagonCoordinates{
+		x: 3,
+		y: -2,
+	}
+	coordinates[FarranacCoast] = HexagonCoordinates{
+		x: -3,
+		y: 2,
+	}
+	coordinates[FishermansRow] = HexagonCoordinates{
+		x: -4,
+		y: 2,
+	}
+	coordinates[Godcrofts] = HexagonCoordinates{
+		x: 4,
+		y: -1,
+	}
+	coordinates[GreatMarch] = HexagonCoordinates{
+		x: 0,
+		y: -2,
+	}
+	coordinates[Heartlands] = HexagonCoordinates{
+		x: -1,
+		y: -1,
+	}
+	coordinates[HowlCounty] = HexagonCoordinates{
+		x: 1,
+		y: 2,
+	}
+	coordinates[Kalokai] = HexagonCoordinates{
+		x: 0,
+		y: -3,
+	}
+	coordinates[KingsCage] = HexagonCoordinates{
+		x: -2,
+		y: 1,
+	}
+	coordinates[LinnOfMercy] = HexagonCoordinates{
+		x: -1,
+		y: 1,
+	}
+	coordinates[LochMor] = HexagonCoordinates{
+		x: -1,
+		y: 0,
+	}
+	coordinates[MarbanHollow] = HexagonCoordinates{
+		x: 1,
+		y: 0,
+	}
+	coordinates[TheMoors] = HexagonCoordinates{
+		x: -1,
+		y: 2,
+	}
+	coordinates[MorgensCrossing] = HexagonCoordinates{
+		x: 3,
+		y: 0,
+	}
+	coordinates[NevishLine] = HexagonCoordinates{
+		x: -3,
+		y: 3,
+	}
+	coordinates[Oarbreaker] = HexagonCoordinates{
+		x: -4,
+		y: 3,
+	}
+	coordinates[Origin] = HexagonCoordinates{
+		x: -3,
+		y: 0,
+	}
+	coordinates[ReachingTrail] = HexagonCoordinates{
+		x: 0,
+		y: 2,
+	}
+	coordinates[ReaversPass] = HexagonCoordinates{
+		x: 3,
+		y: -3,
+	}
+	coordinates[RedRiver] = HexagonCoordinates{
+		x: -1,
+		y: -2,
+	}
+	coordinates[Sableport] = HexagonCoordinates{
+		x: -2,
+		y: 0,
+	}
+	coordinates[ShackledChasm] = HexagonCoordinates{
+		x: 1,
+		y: -2,
+	}
+	coordinates[SpeakingWoods] = HexagonCoordinates{
+		x: -1,
+		y: 3,
+	}
+	coordinates[StemaLanding] = HexagonCoordinates{
+		x: -4,
+		y: 1,
+	}
+	coordinates[StlicanShelf] = HexagonCoordinates{
+		x: 3,
+		y: -1,
+	}
+	coordinates[Stonecradle] = HexagonCoordinates{
+		x: -2,
+		y: 2,
+	}
+	coordinates[TempestIsland] = HexagonCoordinates{
+		x: 4,
+		y: -2,
+	}
+	coordinates[Terminus] = HexagonCoordinates{
+		x: 2,
+		y: -3,
+	}
+	coordinates[TheFingers] = HexagonCoordinates{
+		x: 4,
+		y: -3,
+	}
+	coordinates[UmbralWildwood] = HexagonCoordinates{
+		x: 0,
+		y: -1,
+	}
+	coordinates[ViperPit] = HexagonCoordinates{
+		x: 1,
+		y: 1,
+	}
+	coordinates[WeatheredExpanse] = HexagonCoordinates{
+		x: 2,
+		y: 0,
+	}
+	coordinates[Westgate] = HexagonCoordinates{
+		x: -3,
+		y: 1,
+	}
 
 	return coordinates[:]
 }
