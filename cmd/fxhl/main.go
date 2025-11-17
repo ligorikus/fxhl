@@ -28,8 +28,8 @@ func main() {
 	defer glfw.Terminate()
 
 	glfw.WindowHint(glfw.Resizable, glfw.False)
-	glfw.WindowHint(glfw.ContextVersionMajor, 2)
-	glfw.WindowHint(glfw.ContextVersionMinor, 1)
+	glfw.WindowHint(glfw.ContextVersionMajor, 4)
+	glfw.WindowHint(glfw.ContextVersionMinor, 3)
 
 	monitor := glfw.GetPrimaryMonitor()
 	//videoMode := monitor.GetVideoMode()
@@ -55,8 +55,8 @@ func main() {
 		img := texture.NewImage("assets/Hexes/Map" + gamemap.HexNameList[gamemap.HexName(key)] + "Hex.TGA")
 		rgba := texture.NewRgba(img)
 
-		hexTextures[key] = texture.NewTexture(int32(key), img, rgba)
-		defer gl.DeleteTextures(int32(key), &hexTextures[key])
+		hexTextures[key] = texture.NewTexture(1, img, rgba)
+		defer gl.DeleteTextures(1, &hexTextures[key])
 
 		hexes[key] = getHexagoneCoords(float32(value.GetX()), float32(value.GetY()), 1.0)
 	}
